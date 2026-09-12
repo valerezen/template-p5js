@@ -1,5 +1,10 @@
 import p5 from "p5";
+import { gsap } from "gsap";
+import { CustomEase } from "gsap/CustomEase";
 import { Pane } from "tweakpane";
+import * as EssentialsPlugin from "@tweakpane/plugin-essentials";
+
+gsap.registerPlugin(CustomEase);
 
 const container = document.querySelector(".container");
 let myCanvas;
@@ -22,6 +27,8 @@ const pane = new Pane({
   title: "Params",
 });
 
+pane.registerPlugin(EssentialsPlugin);
+
 pane
   .addBinding(PARAMS, "aspectRatio", {
     label: "ratio",
@@ -29,6 +36,7 @@ pane
       A4: 210 / 297,
       "1:1": 1 / 1,
       "3:4": 3 / 4,
+      "4:5": 4 / 5,
       "9:16": 9 / 16,
     },
   })
@@ -48,8 +56,6 @@ const sketch = (p) => {
 
   p.draw = () => {
     p.background("red");
-    p.fill("blue");
-    p.rect(sizes.width / 2 - 50, sizes.height / 2 - 50, 100, 100);
   };
 
   p.windowResized = () => {
@@ -65,12 +71,6 @@ const sketch = (p) => {
   btnExport.on("click", () => {
     p.saveCanvas("sketch", "png");
   });
-
-  // document.addEventListener("keydown", (e) => {
-  //   if (e.key == " ") {
-  //     p.saveCanvas("sketch", "png");
-  //   }
-  // });
 };
 
 const sketchInstance = new p5(sketch);
