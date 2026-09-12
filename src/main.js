@@ -36,6 +36,10 @@ pane
     sketchInstance.windowResized();
   });
 
+const btnExport = pane.addButton({
+  title: "export png",
+});
+
 const sketch = (p) => {
   p.setup = () => {
     myCanvas = p.createCanvas(sizes.width, sizes.height);
@@ -57,6 +61,16 @@ const sketch = (p) => {
 
     p.resizeCanvas(sizes.width, sizes.height);
   };
+
+  btnExport.on("click", () => {
+    p.saveCanvas("sketch", "png");
+  });
+
+  // document.addEventListener("keydown", (e) => {
+  //   if (e.key == " ") {
+  //     p.saveCanvas("sketch", "png");
+  //   }
+  // });
 };
 
 const sketchInstance = new p5(sketch);
