@@ -5,17 +5,36 @@ const container = document.querySelector(".container");
 let myCanvas;
 
 const PARAMS = {
-  aspect: 1,
+  aspectRatio: 210 / 297,
+};
+
+const resolutions = {
+  width: window.innerWidth,
+  height: window.innerHeight,
 };
 
 const sizes = {
-  width: 400,
-  height: 400,
+  width: resolutions.height * PARAMS.aspectRatio,
+  height: resolutions.height,
 };
 
 const pane = new Pane({
   title: "Params",
 });
+
+pane
+  .addBinding(PARAMS, "aspectRatio", {
+    label: "ratio",
+    options: {
+      A4: 210 / 297,
+      "1:1": 1 / 1,
+      "3:4": 3 / 4,
+      "9:16": 9 / 16,
+    },
+  })
+  .on("change", () => {
+    sketchInstance.windowResized();
+  });
 
 const sketch = (p) => {
   p.setup = () => {
@@ -25,9 +44,19 @@ const sketch = (p) => {
 
   p.draw = () => {
     p.background("red");
+    p.fill("blue");
+    p.rect(sizes.width / 2 - 50, sizes.height / 2 - 50, 100, 100);
+  };
+
+  p.windowResized = () => {
+    resolutions.width = window.innerWidth;
+    resolutions.height = window.innerHeight;
+
+    sizes.width = resolutions.height * PARAMS.aspectRatio;
+    sizes.height = resolutions.height;
+
+    p.resizeCanvas(sizes.width, sizes.height);
   };
 };
 
-new p5(sketch);
-
-console.log(container);
+const sketchInstance = new p5(sketch);
